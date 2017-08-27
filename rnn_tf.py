@@ -3,31 +3,40 @@ import numpy as np
 import random
 import time
 import sys
-import tqdm
+from tqdm import tqdm
 
 def main():
-	ckpt_file = ""
+
 	TEST_PREFIX = "The " # Prefix to prompt the network in test mode
+	DATA_PATH = "data/training_text.txt"
+
+	NUM_TRAIN_BATCHES = 10
+
+	lstm_size = 256 #128
+	num_layers = 2
+	batch_size = 5 #128
+	time_steps = 50 #50
+
+
 
 	## Load the data
 	data_ = ""
-	with open('data/training_text.txt', 'r') as f:
+	with open(DATA_PATH, 'r') as f:
 		data_ += f.read()
 	data_ = data_.lower()
+
+
 
 	## Convert to 1-hot coding
 	vocab = list(set(data_))
 
 	data = embed_to_vocab(data_, vocab)
 
+	ckpt_file = ""
+
 
 	in_size = out_size = len(vocab)
-	lstm_size = 256 #128
-	num_layers = 2
-	batch_size = 5 #128
-	time_steps = 50 #50
 
-	NUM_TRAIN_BATCHES = 10
 
 	LEN_TEST_TEXT = 500 # Number of test characters of text to generate after training the network
 
@@ -60,10 +69,9 @@ def main():
 		batch_y = np.zeros((batch_size, time_steps, in_size))
 
 		possible_batch_ids = range(data.shape[0]-time_steps-1)
-		for i in range(NUM_TRAIN_BATCHES):
+		for i in tqdm(range(NUM_TRAIN_BATCHES)):
 			# Sample time_steps consecutive samples from the dataset text file
 			batch_id = random.sample( possible_batch_ids, batch_size )
-			print('batches: ', i)
 			for j in range(time_steps):
 				ind1 = [k+j for k in batch_id]
 				ind2 = [k+j+1 for k in batch_id]
