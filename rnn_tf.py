@@ -8,14 +8,14 @@ from tqdm import tqdm
 def main():
 
 	TEST_PREFIX = "The " # Prefix to prompt the network in test mode
-	DATA_PATH = "data/training_text.txt"
+	DATA_PATH = "data/training_text.txt" #path to training text
 
-	NUM_TRAIN_BATCHES = 10
+	NUM_TRAIN_BATCHES = 20000 #number of total batches
 
 	lstm_size = 256 #128
 	num_layers = 2
-	batch_size = 5 #128
-	time_steps = 50 #50
+	batch_size =  10 #128
+	time_steps = 10 #50
 
 
 
